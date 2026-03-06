@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMANSAFE | Interactive Simulation</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --btn-bg: #21262d;
+            --btn-hover: #30363d;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        h1, h2 { color: #fff; text-align: center; }
+        .subtitle { text-align: center; color: #8b949e; font-size: 0.9em; margin-bottom: 30px; }
+        .question { font-size: 1.2em; margin-bottom: 20px; font-weight: bold; }
+        .option {
+            background-color: var(--btn-bg);
+            border: 1px solid #30363d;
+            color: var(--text-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            text-align: left;
+            font-size: 1em;
+        }
+        .option:hover { background-color: var(--btn-hover); border-color: var(--accent-color); }
+        #result-screen, #quiz-screen { display: none; }
+        .cta-btn {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            text-decoration: none;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+        .cta-btn:hover { background-color: #3182ce; }
+        .archetype-title { color: var(--accent-color); font-size: 1.5em; text-align: center; margin: 20px 0;}
+    </style>
+</head>
+<body>
+
+<div class="container" id="start-screen">
+    <h1>HUMANSAFE CORE</h1>
+    <div class="subtitle">Interactive Cognitive Simulation</div>
+    <p>Benvenuto nell'infrastruttura di diagnosi etica. Questo sistema analizzerà i tuoi pattern comportamentali per rivelare il tuo livello di intossicazione digitale e il tuo Archetipo.</p>
+    <p>Non ci sono risposte giuste o sbagliate. Sii brutalmente onesto.</p>
+    <button class="cta-btn" onclick="startQuiz()">INIZIA LA SCANSIONE</button>
+</div>
+
+<div class="container" id="quiz-screen">
+    <div class="subtitle">Calcolo HSI in corso... Domanda <span id="q-num">1</span> di 7</div>
+    <div class="question" id="question-text">Domanda</div>
+    <div id="options-container"></div>
+</div>
+
+<div class="container" id="result-screen">
+    <h1>SCANSIONE COMPLETATA</h1>
+    <div class="archetype-title" id="archetype-name">Nome Archetipo</div>
+    <p id="archetype-desc">Descrizione...</p>
+    <p><strong>La tua Micro-Azione:</strong> <span id="archetype-action">Azione</span></p>
+    <a href="INSERISCI_QUI_IL_TUO_LINK_TELEGRAM" class="cta-btn" target="_blank">ACCEDI ALL'ECOSISTEMA (Telegram)</a>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "Ti svegli. La casa è silenziosa e la giornata non è ancora iniziata. Qual è la primissima interazione che hai con la realtà?",
+            options: [
+                { text: "Prendo il telefono senza pensarci. È un gesto automatico per riempire il vuoto.", points: 1 },
+                { text: "Controllo le notizie o i social per vedere le emergenze o cosa mi fa arrabbiare.", points: 2 },
+                { text: "Ascolto un podcast formativo, ma resto a letto, isolato nel mio mondo intellettuale.", points: 3 },
+                { text: "Cerco di non toccare il telefono e respiro, anche se a volte la tentazione vince.", points: 4 },
+                { text: "Telefono spento in un'altra stanza. Dedico i primi minuti a centrare la mia mente.", points: 5 }
+            ]
+        },
+        {
+            q: "Mentre scorri il feed, vedi un post che esprime un'opinione opposta ai tuoi valori, scritta in modo arrogante. Come reagisci interiormente?",
+            options: [
+                { text: "Scorro oltre, non ho voglia di pensare a cose complesse.", points: 1 },
+                { text: "Adrenalina. Scrivo un commento per distruggere la loro tesi.", points: 2 },
+                { text: "Analizzo mentalmente le loro fallacie logiche, mi sento superiore ma non intervengo.", points: 3 },
+                { text: "Provo fastidio, sto per commentare, ma poi mi sforzo di chiudere l'app.", points: 4 },
+                { text: "Riconosco il meccanismo di manipolazione algoritmica e scelgo consciamente di non nutrirlo.", points: 5 }
+            ]
+        },
+        {
+            q: "Un caro amico sta attraversando un momento molto difficile e te lo scrive per messaggio. Come gestisci la situazione?",
+            options: [
+                { text: "Gli mando qualche emoji di supporto. Non so gestire emozioni pesanti.", points: 1 },
+                { text: "Mi indigno insieme a lui, alimentando la sua rabbia contro chi gli ha fatto torto.", points: 2 },
+                { text: "Gli invio il link di un video o libro di psicologia che spiega il suo problema.", points: 3 },
+                { text: "Gli scrivo che ci sono e cerco di chiamarlo per fargli sentire la mia voce.", points: 4 },
+                { text: "Lo incontro di persona. Gli dedico il 100% della mia presenza visiva senza guardare schermi.", points: 5 }
+            ]
+        }
+        // Nota per Messoud: Puoi aggiungere le altre 4 domande qui seguendo lo stesso schema!
+    ];
+
+    let currentQ = 0;
+    let totalScore = 0;
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (currentQ >= questions.length) {
+            showResults();
+            return;
+        }
+        document.getElementById('q-num').innerText = currentQ + 1;
+        document.getElementById('question-text').innerText = questions[currentQ].q;
+        
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        
+        questions[currentQ].options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectOption(opt.points);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(points) {
+        totalScore += points;
+        currentQ++;
+        loadQuestion();
+    }
+
+    function showResults() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        // Calcolo media punti (da 1 a 5)
+        let average = totalScore / questions.length;
+        
+        let archName = "";
+        let archDesc = "";
+        let archAction = "";
+
+        if (average <= 1.5) {
+            archName = "La Cellula Dormiente (Il Nodo Isolato)";
+            archDesc = "Operi in 'risparmio energetico' esistenziale. Usi la tecnologia come anestetico per non affrontare il silenzio.";
+            archAction = "La Regola del Vuoto. 15 minuti al giorno in totale silenzio, senza schermi.";
+        } else if (average <= 2.5) {
+            archName = "La Cellula Reattiva (Il Nodo Infiammato)";
+            archDesc = "Sei in stato di infiammazione. Reagisci con rabbia alle ingiustizie online, sprecando energia vitale.";
+            archAction = "Il Digiuno dell'Opinione. Imponiti 24 ore di silenzio prima di commentare una notizia.";
+        } else if (average <= 3.5) {
+            archName = "La Cellula Osservatrice (Il Nodo Teorico)";
+            archDesc = "Hai un'ottima comprensione intellettuale, ma la tua evoluzione si ferma alla teoria senza applicazione reale.";
+            archAction = "Il Trasferimento Reale. Spiega faccia a faccia un concetto che hai imparato a una persona cara.";
+        } else if (average <= 4.5) {
+            archName = "La Cellula in Risveglio (Il Connettore Empatico)";
+            archDesc = "Stai costruendo difese solide contro la manipolazione digitale e ristabilendo relazioni autentiche.";
+            archAction = "L'Ascolto Radicale. La prossima volta che qualcuno ti parla, offri la tua attenzione totale senza telefono.";
+        } else {
+            archName = "Il Nucleo Sovrano (L'Architetto Consapevole)";
+            archDesc = "Domini lo strumento tecnologico. Sei un fattore di guarigione per l'intero organismo umano.";
+            archAction = "L'Espansione. Aiuta chi sta facendo ora i primi passi verso l'autonomia digitale.";
+        }
+
+        document.getElementById('archetype-name').innerText = archName;
+        document.getElementById('archetype-desc').innerText = archDesc;
+        document.getElementById('archetype-action').innerText = archAction;
+    }
+</script>
+</body>
+</html>
