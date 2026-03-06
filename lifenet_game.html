@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFENET | The Humansafe Simulator</title>
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-main: #e2e8f0;
+            --accent-blue: #38bdf8;
+            --oracle-bg: #000000;
+            --oracle-text: #38bdf8;
+        }
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Stile terminale narrativo */
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .game-container {
+            max-width: 650px;
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        /* Scena Narrativa */
+        #scene-container {
+            animation: fadeIn 1.5s ease-in;
+        }
+        .story-line {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: textReveal 1s forwards;
+        }
+        .question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* Bottoni Scelta */
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .choice-btn {
+            background: transparent;
+            border: 1px solid #334155;
+            color: var(--text-main);
+            padding: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .choice-btn:hover {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.05);
+            transform: translateX(10px);
+        }
+        .choice-btn strong {
+            display: block;
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        /* L'Oracolo (Nascosto di default) */
+        #oracle-container {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--oracle-bg);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            text-align: center;
+            animation: fadeIn 2s;
+        }
+        .oracle-title {
+            color: var(--oracle-text);
+            font-size: 2rem;
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px var(--oracle-text);
+        }
+        .oracle-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 600px;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        .continue-btn {
+            background: var(--oracle-text);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .continue-btn:hover { background: #fff; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes textReveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="game-container" id="scene-container">
+        <div id="story-content">
+            <p style="text-align: center; color: #334155;">Inizializzazione LIFENET in corso...</p>
+        </div>
+        <div id="question-text" class="question"></div>
+        <div class="choices-container" id="choices-container">
+            </div>
+    </div>
+
+    <div id="oracle-container">
+        <div class="oracle-title">HUMANSAFE ORACLE</div>
+        <div class="oracle-text" id="oracle-message"></div>
+        <button class="continue-btn" onclick="endScenario()">AGGIORNA PROFILO</button>
+    </div>
+
+    <script>
+        // Profilo Psicologico Invisibile del Giocatore
+        let playerProfile = {
+            empatia: 0,
+            consapevolezza: 0,
+            impulsivita: 0,
+            resilienza_emotiva: 0,
+            sovranita_cognitiva: 0,
+            fuga_realta: 0
+        };
+
+        // Caricamento del file JSON (Il Cervello)
+        async function loadScenario() {
+            try {
+                // Pesca il file JSON che hai creato prima
+                const response = await fetch('game-data/scenario_01.json');
+                const data = await response.json();
+                renderScene(data);
+            } catch (error) {
+                document.getElementById('story-content').innerHTML = "<p>Errore di connessione al Nodo. Impossibile caricare lo scenario.</p>";
+                console.error("Errore JSON:", error);
+            }
+        }
+
+        // Renderizza la storia sullo schermo
+        function renderScene(data) {
+            const storyDiv = document.getElementById('story-content');
+            const choicesDiv = document.getElementById('choices-container');
+            const questionDiv = document.getElementById('question-text');
+            
+            storyDiv.innerHTML = '';
+            choicesDiv.innerHTML = '';
+
+            // Effetto cascata per il testo (ritardo progressivo)
+            data.setup.forEach((line, index) => {
+                const p = document.createElement('p');
+                p.className = 'story-line';
+                p.style.animationDelay = `${index * 0.8}s`; // Ogni riga appare dopo 0.8s
+                p.innerText = line;
+                storyDiv.appendChild(p);
+            });
+
+            // Appare la domanda e i bottoni
+            setTimeout(() => {
+                questionDiv.innerText = data.question;
+                data.choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerHTML = `<strong>[ ${choice.action_name} ]</strong> ${choice.text}`;
+                    btn.onclick = () => makeChoice(choice);
+                    choicesDiv.appendChild(btn);
+                });
+            }, data.setup.length * 800 + 500); // Aspetta che il testo finisca prima di mostrare i bottoni
+        }
+
+        // Quando il giocatore clicca una scelta
+        function makeChoice(choiceData) {
+            // 1. Aggiorna i parametri psicologici invisibili
+            for (let stat in choiceData.stat_changes) {
+                if (playerProfile[stat] !== undefined) {
+                    playerProfile[stat] += choiceData.stat_changes[stat];
+                }
+            }
+            console.log("PROFILO AGGIORNATO (Log di Sistema):", playerProfile);
+
+            // 2. Mostra l'Oracolo
+            document.getElementById('scene-container').style.display = 'none';
+            const oracleContainer = document.getElementById('oracle-container');
+            const oracleMessage = document.getElementById('oracle-message');
+            
+            oracleMessage.innerText = choiceData.oracle_intervention;
+            oracleContainer.style.display = 'flex';
+        }
+
+        // Fine dello scenario
+        function endScenario() {
+            alert("Scenario completato. I tuoi parametri psicologici sono stati aggiornati nel database (premi F12 per vederli nella Console). Prossimo scenario in sviluppo.");
+            // Qui in futuro caricheremo lo scenario_02.json
+            window.location.href = "lifenet.html"; // Riporta alla dashboard
+        }
+
+        // Avvia il motore all'apertura della pagina
+        window.onload = loadScenario;
+    </script>
+</body>
+</html>
