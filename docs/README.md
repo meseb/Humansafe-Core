@@ -27,5 +27,8 @@ Manuale tecnico per facilitatori, psicologi e franchisee ("Ambasciatori Humansaf
 *Il Libro Bianco per le Istituzioni.*
 Documento di denuncia pubblica sui rischi dell'Intelligenza Artificiale emotiva nei giovani. La proposta per integrare Humansafe in Scuole, Comuni e Sanità Pubblica (ASL).
 
+### 6️⃣ [LIFENET: THE HUMANSAFE SIMULATOR](06_Lifenet_Game_Design.md)
+*Il Game Design Document dell'App Mobile.*
+La visione tecnica e narrativa del nostro simulatore di coscienza sociale sviluppato in React Native. Descrive le meccaniche di gioco, l'Humansafe Oracle e l'uso dei parametri invisibili per l'evoluzione emotiva del giocatore.
 ---
 *Per richiedere i PDF impaginati ufficiali, partnership aziendali o certificazioni B2B, contattare la Direzione Humansafe.*
