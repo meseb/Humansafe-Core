@@ -1,4 +1,7 @@
 # 🛡️ HUMANSAFE CORE 
+<p align="center">
+  <img src="logo_humansafe.jpg" alt="Logo Humansafe" width="250">
+</p>
 **Infrastruttura Etica e Framework Cognitivo per il Nuovo Umanesimo**
 *Founder & Vision Architect: Messoud Sebbahi*
 
