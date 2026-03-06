@@ -1,0 +1,60 @@
+{
+  "scenario_id": "01",
+  "title": "Il Silenzio Rombante",
+  "theme": "Dipendenza da validazione, ansia digitale, gestione del rifiuto.",
+  "trigger": "Vulnerabilità esposta.",
+  "setup": [
+    "Sono le 22:15. Tre ore fa hai inviato un messaggio vocale molto personale a una persona a cui tieni.",
+    "Apri la chat. Sotto il tuo messaggio ci sono le due spunte blu. Visualizzato alle 19:30.",
+    "In alto, sotto il suo nome, c'è scritto 'Online'.",
+    "Fissi lo schermo. Per un secondo appare la scritta 'sta scrivendo...', ma poi scompare. Di nuovo, solo 'Online'.",
+    "Il tuo stomaco si stringe in una morsa di imbarazzo e rabbia. Senti di aver sbagliato a esporti."
+  ],
+  "question": "Cosa fai?",
+  "choices": [
+    {
+      "id": "A",
+      "action_name": "L'Attacco Passivo-Aggressivo",
+      "text": "Gli scrivi: 'Tutto bene? Vedo che leggi ma non rispondi. Se disturbavo potevi dirlo.'",
+      "stat_changes": {
+        "impulsivita": 2,
+        "resilienza_emotiva": -1,
+        "empatia": -1
+      },
+      "oracle_intervention": "Hai trasformato la tua vulnerabilità in rabbia. Pretendere una risposta immediata non nasce dalla tua forza, ma dalla paura dell'abbandono. L'altro è diventato un ostaggio della tua ansia. Ricorda: il tempo degli altri non ti appartiene."
+    },
+    {
+      "id": "B",
+      "action_name": "La Cancellazione",
+      "text": "Usi 'Elimina per tutti' sul vocale, cancellando la tua vulnerabilità.",
+      "stat_changes": {
+        "fiducia_in_se": -2,
+        "capacita_comunicativa": -1,
+        "consapevolezza": 0
+      },
+      "oracle_intervention": "Hai cancellato le tue parole per proteggerti dalla vergogna. Ma nascondendo la tua fragilità, hai cancellato anche la tua autenticità. Chi non ha il coraggio di esporsi al silenzio dell'altro, non conoscerà mai la profondità di un legame reale."
+    },
+    {
+      "id": "C",
+      "action_name": "L'Anestesia Algoritmica",
+      "text": "Chiudi la chat. Apri TikTok/Instagram e scorri velocemente per non sentire il nodo allo stomaco.",
+      "stat_changes": {
+        "fuga_realta": 2,
+        "consapevolezza": -2,
+        "resilienza_emotiva": -1
+      },
+      "oracle_intervention": "Hai sentito dolore e hai subito cercato l'anestetico. L'algoritmo ti ha accolto a braccia aperte. Ma il nodo allo stomaco è ancora lì, solo sepolto. Finché fuggirai dal vuoto, sarai sempre schiavo di chi promette di riempirlo."
+    },
+    {
+      "id": "D",
+      "action_name": "La Sospensione (La Sovranità)",
+      "text": "Riconosci il bruciore dell'ansia. Spegni lo schermo, metti il telefono a faccia in giù e vai a bere un bicchiere d'acqua.",
+      "stat_changes": {
+        "resilienza_emotiva": 2,
+        "consapevolezza": 2,
+        "sovranita_cognitiva": 3
+      },
+      "oracle_intervention": "Il silenzio fa male, e tu hai scelto di sentirlo. Non hai attaccato, non sei fuggito. Hai restituito all'altro il suo tempo e a te stesso il tuo spazio. Questa è la Sovranità Cognitiva. Ti stai rafforzando."
+    }
+  ]
+}
