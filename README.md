@@ -18,7 +18,7 @@ Siamo la generazione tecnologicamente più connessa di sempre, eppure non siamo 
 
 Questo repository costituisce il "Nodo Zero" dell'ecosistema Humansafe e contiene:
 
-* 📁 `/docs` - I 5 Pilastri Legali, Etici e Operativi (Manifesto, Charter, B2B Standard, Framework, Public Report).
+* 📁 `/docs` - I 6 Pilastri Legali, Etici e Operativi (Manifesto, Charter, B2B Standard, Framework, Public Report).
 * 📁 `/core-algorithm` - La formula matematica alla base dell'**HUMANSAFE INDEX (HSI)** per il calcolo della tossicità vs sicurezza cognitiva.
 * 📁 `/iself-smart-contract` - [WIP] Proof of Concept del Token di accountability su blockchain.
 * 📁 `/interactive-simulation` - Il motore logico gamificato per l'analisi dei pattern mentali (Archetipi).
